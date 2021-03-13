@@ -33,7 +33,7 @@ public class controllerBasico {
         ArrayList<Post> post = new ArrayList<>();
         post.add(new Post(1,"Titulo UNO","Descripcion UNO",new Date(),"https://projectlombok.org/img/projectlombok-tidelift-mix.png"));
         post.add(new Post(2,"Titulo DOS","descipcion",new Date(),"https://projectlombok.org/img/projectlombok-tidelift-mix.png"));
-
+        post.add(new Post(3,"Titulo DOS","descipcion",new Date(),"https://projectlombok.org/img/projectlombok-tidelift-mix.png"));
         return post;
     }
 
