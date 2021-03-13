@@ -4,10 +4,7 @@ import com.cursoSpring.Kruger.model.Post;
 import com.cursoSpring.Kruger.configuracion.Paginas;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,8 +16,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/home")
 public class controllerBasico {
 
-//    Paginas paginas = new Paginas();
-    public Post getPost(){
+
+    public Post getPost(){ //este metodo retorna solo un objeto de tipo POST
 
         ArrayList<Post> post = new ArrayList<>();
         post.add(new Post(1,"Titulo","descipcion",new Date(),"https://projectlombok.org/img/projectlombok-tidelift-mix.png"));
@@ -31,7 +28,7 @@ public class controllerBasico {
         return publicacion;
     }
 
-    public List<Post> getListPost(){
+    public List<Post> getListPost(){ //Este metodo retorna una lista de Objetos tipo POST
 
         ArrayList<Post> post = new ArrayList<>();
         post.add(new Post(1,"Titulo UNO","Descripcion UNO",new Date(),"https://projectlombok.org/img/projectlombok-tidelift-mix.png"));
@@ -53,6 +50,20 @@ public class controllerBasico {
         return "index";
     }
 
+    @GetMapping({"/nuevo"}) //aqui redirigo  a la lista de posts MAIN
+    public ModelAndView obtieneForm(){
+
+        return new ModelAndView("formulario").addObject("post",new Post());
+    }
+
+    @PostMapping("/addNewPost")
+    public String addNewPost(Post post,Model model){ //aqui le cargo a la lista de post ya definida antes, con el nuevo post que viene
+        List<Post> posts = this.getListPost();
+        posts.add(post);
+        model.addAttribute("postslist",posts);
+        return "index";
+    }
+
 
     @GetMapping(path = {"/post"})  // aqui redirigo a una sola vista filtrada por el id
     public ModelAndView getPostIndividual(@RequestParam(defaultValue = "1",name = "id",required = false) int id){
@@ -71,9 +82,7 @@ public class controllerBasico {
     }
 
     @GetMapping(path = {"/postPath","/postPath/p/{post}"})  // aqui redirigo a una sola vista filtrada por el id y se abre en otro path
-    public ModelAndView getPostPath(
-                                        @PathVariable(required = true, name = "post") int id){
-
+    public ModelAndView getPostPath(@PathVariable(required = true, name = "post") int id){
         ModelAndView modelAndView = new ModelAndView(Paginas.POST);
 
         List<Post> postFiltrado = this.getListPost().stream()
